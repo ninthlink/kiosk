@@ -1,0 +1,57 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Ninthlink Kiosk</title>
+<style type="text/css">
+body, html { height: 100% }
+body { margin: 0; padding: 0 }
+#k, .s { float: left; position: relative; width: 100%; height: inherit }
+.s { width: 50%; overflow: hidden }
+.s img { float: left; position: absolute; top: -100%; left: 0; width: auto; height: 100%; z-index: 1 }
+.s img.on { top: 0 }
+#th { background: url(images/th.png) no-repeat 0 0; display: block; width: 156px; height: 156px; position: absolute; top: 50%; left: 50%; margin: -78px 0 0 -78px; z-index: 9 }
+</style>
+</head>
+
+<body>
+<div id="k">
+<div id="th"></div>
+<div class="s l"><img src="images/rt/rt1.jpg" class="on" /><img src="images/rt/rt2.jpg" /><img src="images/rt/rt3.jpg" /><img src="images/rt/rt4.jpg" /><img src="images/rt/rt5.jpg" /></div>
+<div class="s r"><img src="images/left/left1.jpg" class="on" /><img src="images/left/left2.jpg" /><img src="images/left/left3.jpg" /><img src="images/left/left4.jpg" /><img src="images/left/left5.jpg" /></div>
+</div>
+<script type="text/javascript" src="jquery.min.js"></script>
+<script type="text/javascript">
+var ms = 1500, cycler, rtcyc = false;
+function nlk_cyc() {
+	var frm = rtcyc ? $('.r') : $('.l');
+	var onn = frm.children('.on');
+	var nx = onn.siblings();
+	var rn = Math.floor( Math.random() * nx.size() );
+	nx = nx.eq(rn);
+	nx.css({ left: 0, top: (rtcyc ? '' : '-') + '100%'});
+	onn.add(nx).animate({
+		top: ( rtcyc ? '-' : '+' ) + '=100%'
+	}, 600, function() {
+		if ( $(this).hasClass('on') ) {
+			$(this).removeClass('on');
+		} else {
+			$(this).addClass('on');
+			cycler = setTimeout(nlk_cyc, ms );
+			rtcyc = !rtcyc;
+		}
+	});
+}
+function nlk_resize() {
+	var ww = $(window).width();
+	var iw = $('img:eq(0)').width();
+	var lof = Math.floor( ( Math.floor(ww/2) - iw ) / 2 );
+	$('img').css('margin-left', lof);
+}
+$(function() {
+	cycler = setTimeout(nlk_cyc, ms);
+	$(window).bind('resize', nlk_resize).trigger('resize');
+});
+</script>
+</body>
+</html>
